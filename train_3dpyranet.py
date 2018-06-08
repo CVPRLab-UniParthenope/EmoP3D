@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import tensorflow as tf
 import numpy as np
 from datasets import input_data
@@ -11,7 +13,7 @@ flags = tf.app.flags
 
 # Checkpoint settings
 flags.DEFINE_float("evaluate_every", 1, "Number of epoch for each evaluation (decimals allowed)")
-flags.DEFINE_string("test_milestones", "15,20,25,30,35,40,45,50,75,100", "TEST performed")
+flags.DEFINE_string("test_milestones", "15,20,25,30,35,40,45,50,75,100", "Each epoch where performs test")
 flags.DEFINE_boolean("save_checkpoint", False, "Flag to save checkpoint or not")
 flags.DEFINE_string("checkpoint_name", "3dpyranet.ckpt", "Name of checkpoint file")
 
@@ -19,38 +21,39 @@ flags.DEFINE_string("checkpoint_name", "3dpyranet.ckpt", "Name of checkpoint fil
 dataset_path = "path/to/dataset"
 flags.DEFINE_string("train_path",
                     os.path.join(dataset_path, "Training.npy"),
-                    "Path to training set list file")
+                    "Path to npy training set")
 flags.DEFINE_string("train_labels_path",
                     os.path.join(dataset_path, "Training_label.npy"),
-                    "Path to training set list file")
+                    "Path to npy training set labels")
 flags.DEFINE_string("val_path",
                     os.path.join(dataset_path, "TestVal.npy"),
-                    "Path to validation set list file")
+                    "Path to npy val/test set")
 flags.DEFINE_string("val_labels_path",
                     os.path.join(dataset_path, "TestVal_label.npy"),
-                    "Path to validation set list file")
+                    "Path to npy val/test set labels")
 flags.DEFINE_string("save_path", "train_dir",
-                    "Folder where model will be saved (PYTHON_EXECUTABLE/save_path)")
+                    "Path where to save network model")
 
+# Input parameters
 flags.DEFINE_integer("batch_size", 100, "Batch size")
-flags.DEFINE_integer("depth_frames", 16, "Number of consecutive frames in a video")
-flags.DEFINE_integer("height", 100, "Frame height")
-flags.DEFINE_integer("width", 100, "Frame width")
-flags.DEFINE_integer("in_channels", 1, "Frame channels")
-flags.DEFINE_integer("feature_maps", 3, "Feature maps to extract")
+flags.DEFINE_integer("depth", 16, "Number of consecutive samples")
+flags.DEFINE_integer("height", 100, "Samples height")
+flags.DEFINE_integer("width", 100, "Samples width")
+flags.DEFINE_integer("in_channels", 1, "Samples channels")
 flags.DEFINE_integer("num_classes", 6, "Number of classes")
-flags.DEFINE_boolean("normalize", True, "Normalize image in range 0-1")
-flags.DEFINE_boolean("grayscale", True, "Convert image to grayscale")
 
-flags.DEFINE_boolean("sparse_sce", True, "Type of softmax cross entropy")
+# Preprocessing
+flags.DEFINE_boolean("normalize", True, "Normalize image in range 0-1")
 
 # Hyper-parameters settings
+flags.DEFINE_integer("feature_maps", 3, "Number of maps to use (strict model shares the number of maps in each layer)")
 flags.DEFINE_float("learning_rate", 0.00015, "Learning rate")
-flags.DEFINE_integer("decay_steps", 10, "Number of iteration for each decay")
-flags.DEFINE_float("decay_rate", 0.1, "Number of iteration for each decay")
-flags.DEFINE_integer("max_steps", 50, "Total number of iteration (dataset_len * epochs)")
-flags.DEFINE_float("weight_decay", None, "Total number of iteration (dataset_len * epochs)")
+flags.DEFINE_integer("decay_steps", 15, "Number of iteration for each decay")
+flags.DEFINE_float("decay_rate", 0.1, "Learning rate decay")
+flags.DEFINE_integer("max_steps", 50, "Maximum number of epoch to perform")
+flags.DEFINE_float("weight_decay", None, "L2 regularization lambda")
 
+# Optimization algorithm
 opt_type = ["GD", "MOMENTUM", "ADAM"]
 flags.DEFINE_string("optimizer", opt_type[1], "Optimization algorithm")
 flags.DEFINE_boolean("use_nesterov", False, "Use Nesterov Momentum")
@@ -156,7 +159,7 @@ def train():
 
     global_step = tf.get_variable("global_step", [], initializer=tf.constant_initializer(0), trainable=False)
 
-    input_placeholder = tf.placeholder(tf.float32, shape=(FLAGS.batch_size, FLAGS.depth_frames,
+    input_placeholder = tf.placeholder(tf.float32, shape=(FLAGS.batch_size, FLAGS.depth,
                                                           FLAGS.height, FLAGS.width, FLAGS.in_channels),
                                        name="input_placeholder")
     labels_placeholder = tf.placeholder(tf.int64, shape=[FLAGS.batch_size], name="label_placeholder")
@@ -252,7 +255,7 @@ def train():
                 if (step / batch_step) in test_milestones or (step + 1) == FLAGS.max_steps:
                     if FLAGS.save_checkpoint:
                         saver.save(sess, os.path.join(model_save_dir, FLAGS.checkpoint_name), global_step=step)
-                    print "testing..."
+                    print("testing...")
 
                     test_acc_list, test_loss_list = [], []
                     for _ in trange(test_batch_step):
