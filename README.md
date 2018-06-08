@@ -33,22 +33,22 @@ Code is tested on eNTERFACE '05 [[2]](#2) and ICT Youtube [[3]](#3) datasets;
 |    AVER-CNN [[4]](#4)    |    62%    |      -      |
 | LSTM(A) Binary [[6]](#6) |     -     |    52.3%    |
 |      MARN [[7]](#7)     |     -     |    54.2%    |
-|  EmoP3D (Ours) |   71.47%  |     75%     |
+|  **EmoP3D (Ours)** |   71.47%  |     75%     |
 
 ## Usage
 
 Code uses *Sparse Softmax Cross Entropy* as loss function, it doesn't need *One Hot Encoding*.
 
-#### Dependencies
+### Dependencies
 
 *   Tensorflow 1.2+;
 *   TQDM;
 *   Numpy;
 *   Packaging;
 
-#### FLAGS
+### FLAGS
 
-##### Checkpoint and evaluation
+#### Checkpoint and evaluation
 
 |      Option     |   Type  |     Default    |                       Description                      |
 |:---------------:|:-------:|:--------------:|:-------------------------------------------------------|
@@ -58,7 +58,7 @@ Code uses *Sparse Softmax Cross Entropy* as loss function, it doesn't need *One 
 | checkpoint_name |  string | 3dpyranet.ckpt | Name of checkpoint file                                   |
 
 
-##### Input
+#### Input
 
 |       Option      |  Type  | Default |            Description           |
 |:-----------------:|:------:|:-------:|:---------------------------------|
@@ -69,7 +69,7 @@ Code uses *Sparse Softmax Cross Entropy* as loss function, it doesn't need *One 
 |     save_path     | string |    //   | Path where to save network model |
 
 
-##### Input parameters
+#### Input parameters
 
 |    Option    | Type | Default |          Description          |
 |:------------:|:----:|:-------:|:------------------------------|
@@ -81,7 +81,7 @@ Code uses *Sparse Softmax Cross Entropy* as loss function, it doesn't need *One 
 |  num_classes |  int |    6    | Number of classes             |
 
 
-##### Hyper-parameters settings
+#### Hyper-parameters settings
 
 |     Option    |  Type | Default |                                  Description                                 |
 |:-------------:|:-----:|:-------:|:-----------------------------------------------------------------------------|
@@ -93,7 +93,7 @@ Code uses *Sparse Softmax Cross Entropy* as loss function, it doesn't need *One 
 |  weight_decay | float |   None  | L2 regularization lambda                                                     |
 
 
-##### Optimization 
+#### Optimization 
 
 |    Option    |   Type  |  Default |                              Description                              |
 |:------------:|:-------:|:--------:|:----------------------------------------------------------------------|
