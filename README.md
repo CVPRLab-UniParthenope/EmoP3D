@@ -2,11 +2,6 @@
 
 EmoP3D is a pyramidal neural network for emotion recognition, based on biological pyramidal neurons developed in [[1]](#1);
 
-Code for Poster Session at IWCV18:
- 
-> Di Nardo E., Petrosino A., Ullah I. - Spatio-Temporal Pyramidal Deep Learning in Emotion Recognition. 
-Poster presented at: International Workshop on Computer Vision (IWCV); 2018, May 29-31; Modena, Italy.
-
 ## Datasets & Results
 
 Code is tested on eNTERFACE '05 [[2]](#2) and ICT Youtube [[3]](#3) datasets;
