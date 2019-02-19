@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import tensorflow as tf
 import numpy as np
 from datasets import input_data
@@ -213,7 +211,7 @@ def train():
 
         t_acc, v_acc, t_loss, v_loss = .0, .0, .0, .0
         for step in total_steps:
-            train_images, train_labels = train_batch.next()
+            train_images, train_labels = next(train_batch)
             _, t_loss = sess.run([train_op, loss], feed_dict={
                 input_placeholder: train_images,
                 labels_placeholder: train_labels
@@ -236,7 +234,7 @@ def train():
                     })
                 train_writer.add_summary(summary, step)
 
-                val_images, val_labels = val_batch.next()
+                val_images, val_labels = next(val_batch)
                 summary, v_loss, v_acc = sess.run(
                     [merged, loss, accuracy],
                     feed_dict={
@@ -259,7 +257,7 @@ def train():
 
                     test_acc_list, test_loss_list = [], []
                     for _ in trange(test_batch_step):
-                        test_images, test_labels = test_batch.next()
+                        test_images, test_labels = next(test_batch)
                         test_acc, test_loss = sess.run(
                             [accuracy, loss],
                             feed_dict={
