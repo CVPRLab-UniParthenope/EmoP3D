@@ -116,12 +116,11 @@ def ws3d(input_tensor, weights, rf=(3, 4, 4), strides=(1, 1, 1, 1, 1),
             conv_weights = tf.constant(1.0, tf.float32, shape=(rf[0], rf[1], rf[2], c, 1),
                                        name="{}/conv_kernel".format(name))
 
-            for fm in xrange(out_channels):
+            for fm in range(out_channels):
                 assign_ops = []
-                for cd in xrange(output_depth):
+                for cd in range(output_depth):
                     s = cd * strides[1]
                     out_mul = tf.multiply(input_tensor[:, s:s + rf[0], :, :, :], weights[:, :, :, :, fm])
-
 
                     with tf.name_scope("Correlation_Op"):
                         corr = tf.nn.conv3d(out_mul, conv_weights,
@@ -143,7 +142,7 @@ def max_pool3d(input_data, weight_depth=3, rf=(3, 2, 2), strides=(1, 1, 2, 2, 1)
                                 data_format=data_format, name="max_pooling3d")
 
         output = []
-        for depth in xrange(out_depth):
+        for depth in range(out_depth):
             output.append(tf.reduce_max(pool[:, depth:depth + weight_depth], axis=1))
 
         output = tf.transpose(output, [1, 0, 2, 3, 4])
@@ -160,7 +159,7 @@ def avg_pool3d(input_data, weight_depth=3, rf=(3, 2, 2), strides=(1, 1, 2, 2, 1)
                                 data_format=data_format, name="avg_pooling3d")
 
         output = []
-        for depth in xrange(out_depth):
+        for depth in range(out_depth):
             output.append(tf.reduce_mean(pool[:, depth:depth + weight_depth], axis=1))
 
         output = tf.transpose(output, [1, 0, 2, 3, 4])

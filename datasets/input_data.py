@@ -11,7 +11,7 @@ def generate_batch(x, y, batch_size=100, shuffle=True):
         if shuffle:
             idx_perm = np.random.permutation(x.shape[0])
 
-        for i, batch in enumerate(xrange(0, x.shape[0], batch_size)):
+        for i, batch in enumerate(range(0, x.shape[0], batch_size)):
             if i == total_iteration:
                 continue
 
