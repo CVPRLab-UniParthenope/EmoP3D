@@ -1,6 +1,6 @@
 import tensorflow as tf
 from models.pyranet import *
-from variables import *
+from .variables import *
 
 
 def ws3d_layer(input, out_filters, rf=(3, 4, 4), strides=(1, 1, 1, 1, 1), act_fn=lrelu,
@@ -31,7 +31,6 @@ def ws3d_layer(input, out_filters, rf=(3, 4, 4), strides=(1, 1, 1, 1, 1), act_fn
             tf.logging.info("\t{} {}".format(net.name, net.shape))
 
         return net
-
 
 
 def pool3d_layer(input_data, weight_depth=3, rf=(3, 2, 2), strides=(1, 1, 2, 2, 1), act_fn=lrelu,

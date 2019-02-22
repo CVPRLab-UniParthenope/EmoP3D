@@ -1,21 +1,23 @@
 from __future__ import division
-from __future__ import print_function
 
 import numpy as np
 import time
 
+
 def generate_batch(x, y, batch_size=100, shuffle=True):
     total_iteration = x.shape[0] // batch_size
     while True:
-        idx_perm = range(x.shape[0])
         if shuffle:
             idx_perm = np.random.permutation(x.shape[0])
+        else:
+            idx_perm = range(x.shape[0])
 
         for i, batch in enumerate(range(0, x.shape[0], batch_size)):
             if i == total_iteration:
                 continue
 
-            local_sorted_perm = map(int, np.sort(idx_perm[batch:batch + batch_size]))
+            local_sorted_perm = list(map(int, idx_perm[batch:batch + batch_size]))
+            print(len(local_sorted_perm), x.shape)
             x_out = x[local_sorted_perm]
             y_out = y[local_sorted_perm]
             yield x_out, y_out

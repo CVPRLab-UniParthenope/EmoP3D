@@ -31,6 +31,7 @@ flags.DEFINE_string("val_labels_path",
                     "Path to npy val/test set labels")
 flags.DEFINE_string("save_path", "train_dir",
                     "Path where to save network model")
+flags.DEFINE_boolean("random_run", False, "Set usage of random data for debug purpose")
 
 # Input parameters
 flags.DEFINE_integer("batch_size", 100, "Batch size")
@@ -129,10 +130,10 @@ def prepare_dataset():
 
 
 def random_dataset():
-    train_x = np.random.rand(1000, 16, 100, 100, 1)
-    train_y = np.random.random_integers(0, 5, 1000)
-    val_x = np.random.rand(1000, 16, 100, 100, 1)
-    val_y = np.random.random_integers(0, 5, 1000)
+    train_x = np.random.rand(FLAGS.batch_size, FLAGS.depth, FLAGS.height, FLAGS.width, FLAGS.in_channels)
+    train_y = np.random.random_integers(0, FLAGS.num_classes, FLAGS.batch_size)
+    val_x = np.random.rand(FLAGS.batch_size, FLAGS.depth, FLAGS.height, FLAGS.width, FLAGS.in_channels)
+    val_y = np.random.random_integers(0, FLAGS.num_classes, FLAGS.batch_size)
 
     batch_step = train_x.shape[0] // FLAGS.batch_size
     test_batch_step = val_x.shape[0] // FLAGS.batch_size
@@ -153,7 +154,10 @@ def random_dataset():
 
 
 def train():
-    batch_step, test_batch_step, train_batch, val_batch, test_batch = prepare_dataset()
+    if FLAGS.random_run:
+        batch_step, test_batch_step, train_batch, val_batch, test_batch = random_dataset()
+    else:
+        batch_step, test_batch_step, train_batch, val_batch, test_batch = prepare_dataset()
 
     global_step = tf.get_variable("global_step", [], initializer=tf.constant_initializer(0), trainable=False)
 

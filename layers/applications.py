@@ -1,5 +1,5 @@
 import tensorflow as tf
-from layers import ws3d_layer, pool3d_layer, normalization_layer
+from .layers import ws3d_layer, pool3d_layer, normalization_layer
 from models import pyranet
 
 
